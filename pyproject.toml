@@ -1,0 +1,12 @@
+[project]
+name = "digipet"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = [
+    "adafruit-circuitpython-ssd1306>=2.12.18",
+    "numpy>=2.0.2",
+    "pillow>=11.0.0",
+    "rpi-gpio>=0.7.1",
+]
