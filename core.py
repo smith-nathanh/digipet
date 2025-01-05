@@ -53,40 +53,77 @@ class DigitalPet:
         self.running = True
         
         # Bunny ASCII frames
+#         self.bunny_normal = [
+#             """ (\_/)
+#  (•ᴥ•)
+# (")_(")""",
+#             """ (\_/)
+#  (•ᴥ•)
+# (")^(")"""
+#         ]
+        
+#         self.bunny_happy = [
+#             """ (\_/)
+#  (^ᴥ^)
+# (")_(")""",
+#             """ (\_/)
+#  (^ᴥ^)
+# (")^(")"""
+#         ]
+        
+#         self.bunny_sad = [
+#             """ (\_/)
+#  (•︵•)
+# (")_(")""",
+#             """ (\_/)
+#  (•︵•)
+# (")^(")"""
+#         ]
+        
+#         self.bunny_sleeping = [
+#             """  (\ /)
+#   (- . -)
+#   ("|"|)""",
+#             """  (\ /)
+#   (- . -)
+#    ("|"|)"""
+#         ]
+
+        # Bunny ASCII frames
         self.bunny_normal = [
-            """ (\_/)
- (•ᴥ•)
-(")_(")""",
-            """ (\_/)
- (•ᴥ•)
-(")^(")"""
+            """   (\ /)
+  (- . -)
+  ("|"|)""",
+            """   (\ /)
+  (- . -)
+   ("|"|)"""
         ]
         
         self.bunny_happy = [
-            """ (\_/)
- (^ᴥ^)
-(")_(")""",
-            """ (\_/)
- (^ᴥ^)
-(")^(")"""
+            """   (\ /)
+  (- . -)
+  ("|"|)""",
+            """   (\ /)
+  (- . -)
+   ("|"|)"""
         ]
         
         self.bunny_sad = [
-            """ (\_/)
- (•︵•)
-(")_(")""",
-            """ (\_/)
- (•︵•)
-(")^(")"""
+            """   (\ /)
+  (- _ -)
+  ("|"|)""",
+            """   (\ /)
+  (- _ -)
+   ("|"|)"""
         ]
         
         self.bunny_sleeping = [
-            """  (\ /)
+            """   (\ /)
   (- . -)
   ("|"|)""",
-            """  (\ /)
+            """   (\ /)
   (- . -)
-   ("|"|)"""
+  ("|"|)"""
         ]
         
         # Start animation thread
@@ -169,7 +206,7 @@ class DigitalPet:
             # Calculate arc to bunny's mouth (positioned relative to center)
             progress = self.arc_start_time / arc_duration
             target_x = self.oled.width // 2  # Bunny's mouth x position
-            target_y = 35  # Bunny's mouth y position
+            target_y = 39  # Bunny's mouth y position
             
             # Arc motion
             self.pellet_x = self.pellet_x + (target_x - self.pellet_x) * progress
