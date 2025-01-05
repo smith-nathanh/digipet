@@ -282,16 +282,27 @@ class DigitalPet:
         
         if GPIO.input(self.FEED_BTN):
             print("Feeding pet!")
-            self.hunger = min(100, self.hunger + 15)
+            # Remove the direct hunger increase here since we'll do it when pellet is eaten
             self.last_interaction = time.time()
             self.show_pellet = True
             self.pellet_state = "drop"
             self.pellet_x = 10
             self.pellet_y = 32  # Start from middle height
-            self.pellet_velocity_y = 4 #2
-            self.pellet_velocity_x = 2 #1
+            self.pellet_velocity_y = 4 
+            self.pellet_velocity_x = 2
             time.sleep(0.2)
             
+        # Add pellet collision check in update_display or wherever pellet movement is handled
+        if self.show_pellet:
+            # Bunny's mouth position:
+            # X: Center of screen (64)
+            # Y: Slightly above bottom (42) for more natural feeding
+            # Detection zone: 5 pixel radius
+            if abs(self.pellet_x - 64) < 5 and abs(self.pellet_y - 42) < 5:
+                self.hunger = min(100, self.hunger + 15)
+                self.show_pellet = False
+                print("Pellet eaten!")
+
         if GPIO.input(self.PET_BTN):
             print("Petting!")
             self.happiness = min(100, self.happiness + 15)
@@ -305,42 +316,22 @@ class DigitalPet:
             self.last_interaction = time.time()
             time.sleep(0.2)
     
-    def draw_status_bar(self, y_pos, value, label):
-        """Draw a dashed status bar"""
-        label_with_padding = f"{label}:  "
-        self.draw.text((0, y_pos), label_with_padding, fill=255)
-        
-        bar_start_x = 45
-        dash_length = 4
-        gap_length = 3
-        dash_height = 4
-        total_dashes = 12
-        
-        filled_dashes = int((value / 100.0) * total_dashes)
-        
-        for i in range(total_dashes):
-            x_pos = bar_start_x + i * (dash_length + gap_length)
-            if i < filled_dashes:
-                self.draw.rectangle(
-                    (x_pos, y_pos + 2, x_pos + dash_length - 1, y_pos + dash_height + 1),
-                    outline=255,
-                    fill=255
-                )
-            else:
-                self.draw.line(
-                    (x_pos, y_pos + 4, x_pos + dash_length - 1, y_pos + 4),
-                    fill=255,
-                    width=1
-                )
+    def draw_status_bar(self, x_pos, y_pos, value, label):
+        """Draw status value at specified position"""
+        status_text = f"{label}: {int(value)}"
+        self.draw.text((x_pos, y_pos), status_text, fill=255)
 
     def update_display(self):
         """Update OLED display"""
         self.draw.rectangle((0, 0, self.oled.width, self.oled.height), outline=0, fill=0)
         
-        # Only draw status bars if awake
+        # Only draw status values if awake
         if not self.is_sleeping:
-            self.draw_status_bar(0, self.hunger, "Hunger")
-            self.draw_status_bar(8, self.happiness, "Happy")
+            self.draw_status_bar(0, 0, self.hunger, "Hunger")  # Left side
+            # Calculate position for happiness to right-align it
+            happy_text = f"Happy: {int(self.happiness)}"
+            happy_width = len(happy_text) * 6  # Approximate pixel width of text
+            self.draw_status_bar(self.oled.width - happy_width, 0, self.happiness, "Happy")
         
         # Draw bunny
         self.draw_bunny()
